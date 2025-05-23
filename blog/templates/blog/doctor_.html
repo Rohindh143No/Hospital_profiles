@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Blogs</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #000000;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ffffff;
+      margin-bottom: 30px;
+    }
+
+    /* Blog post styles */
+    .blog-post {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .blog-post img {
+      width: 120px;
+      height: 100px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .blog-details {
+      flex-grow: 1;
+    }
+
+    .blog-details h3 {
+      margin: 0 0 10px;
+      color: #222;
+    }
+
+    .blog-details p {
+      margin: 0 0 5px;
+      color: #555;
+    }
+
+    .blog-details small {
+      color: #999;
+    }
+
+    hr {
+      border: none;
+      height: 1px;
+      background: #ccc;
+      margin: 40px 0;
+    }
+
+    /* Create Blog Button */
+    button#createBlogBtn {
+      display: block;
+      margin: 0 auto 30px;
+      background: #007BFF;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s ease;
+    }
+
+    button#createBlogBtn:hover {
+      background: #0056b3;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+      background: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 600px;
+      position: relative;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 24px;
+      color: #aaa;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .close-btn:hover {
+      color: #333;
+    }
+
+    /* Form inside modal */
+    form {
+      background: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    form button[type="submit"] {
+      background: #007BFF;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 10px;
+      transition: background 0.3s ease;
+    }
+
+    form button[type="submit"]:hover {
+      background: #0056b3;
+    }
+
+    @media (max-width: 600px) {
+      .blog-post {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .blog-post img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<h1>My Blogs</h1>
+
+<!-- Create Blog Button -->
+<button id="createBlogBtn" onclick="openForm()">Create Blog</button>
+
+<hr>
+
+<!-- Blog posts list -->
+{% for post in user_blogs %}
+  <div class="blog-post">
+    <img src="{{ post.image.url }}" alt="{{ post.title }}">
+    <div class="blog-details">
+      <h3>{{ post.title }}</h3>
+      <p>{{ post.summary }}</p>
+      <small>
+  {{ post.category }} | {{ post.created_at|date:"M d, Y" }}
+  {% if post.is_draft %}
+    <span style="color: red; font-weight: bold; margin-left: 10px;">[Draft]</span>
+  {% endif %}
+</small>
+    </div>
+  </div>
+{% empty %}
+  <p style="text-align:center; color:#777;">You haven't posted any blogs yet.</p>
+{% endfor %}
+
+<!-- Modal with blog creation form -->
+<div id="formModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeForm()">&times;</span>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Post</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  function openForm() {
+    document.getElementById('formModal').style.display = 'block';
+  }
+
+  function closeForm() {
+    document.getElementById('formModal').style.display = 'none';
+  }
+
+  // Close modal if clicking outside modal-content
+  window.onclick = function(event) {
+    const modal = document.getElementById('formModal');
+    if (event.target === modal) {
+      closeForm();
+    }
+  }
+</script>
+
+</body>
+</html>

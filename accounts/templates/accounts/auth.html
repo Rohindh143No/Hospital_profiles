@@ -1,0 +1,185 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Authentication</title>
+  <link rel="stylesheet" href="{% static 'accounts/css/auth.css' %}" />
+  <script src="{% static 'accounts/js/auth.js' %}"></script>
+</head>
+<body>
+
+<div class="container" id="auth-container">
+  <div class="card" id="card">
+
+    <!-- Login Form -->
+    <div class="side front">
+      <h2>Login</h2>
+      <form method="POST" novalidate>
+        {% csrf_token %}
+
+        {% if login_form.non_field_errors %}
+          <div class="errorlist">{{ login_form.non_field_errors }}</div>
+        {% endif %}
+
+        <div class="form-group">
+          <label for="{{ login_form.username.id_for_label }}">Username</label>
+          {{ login_form.username }}
+          {% if login_form.username.errors %}
+            <div class="errorlist">{{ login_form.username.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ login_form.password.id_for_label }}">Password</label>
+          {{ login_form.password }}
+          {% if login_form.password.errors %}
+            <div class="errorlist">{{ login_form.password.errors }}</div>
+          {% endif %}
+        </div>
+
+        <button type="submit" name="login">Login</button>
+      </form>
+      <button class="toggle-btn" onclick="flip()">Don't have an account? Sign Up</button>
+    </div>
+
+    <!-- Signup Form -->
+    <div class="side back">
+      <h2>Sign Up</h2>
+      <form method="POST" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        {% if signup_form.non_field_errors %}
+          <div class="errorlist">{{ signup_form.non_field_errors }}</div>
+        {% endif %}
+
+        <div class="form-group">
+          <label for="{{ signup_form.first_name.id_for_label }}">First Name</label>
+          {{ signup_form.first_name }}
+          {% if signup_form.first_name.errors %}
+            <div class="errorlist">{{ signup_form.first_name.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ signup_form.last_name.id_for_label }}">Last Name</label>
+          {{ signup_form.last_name }}
+          {% if signup_form.last_name.errors %}
+            <div class="errorlist">{{ signup_form.last_name.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ signup_form.profile_picture.id_for_label }}">Profile Picture</label>
+          {{ signup_form.profile_picture }}
+          {% if signup_form.profile_picture.errors %}
+            <div class="errorlist">{{ signup_form.profile_picture.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ signup_form.username.id_for_label }}">Username</label>
+          {{ signup_form.username }}
+          {% if signup_form.username.errors %}
+            <div class="errorlist">{{ signup_form.username.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ signup_form.email.id_for_label }}">Email</label>
+          {{ signup_form.email }}
+          {% if signup_form.email.errors %}
+            <div class="errorlist">{{ signup_form.email.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ signup_form.user_type.id_for_label }}">User Type</label>
+          {{ signup_form.user_type }}
+          {% if signup_form.user_type.errors %}
+            <div class="errorlist">{{ signup_form.user_type.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ signup_form.address_line1.id_for_label }}">Address Line 1</label>
+          {{ signup_form.address_line1 }}
+          {% if signup_form.address_line1.errors %}
+            <div class="errorlist">{{ signup_form.address_line1.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ signup_form.city.id_for_label }}">City</label>
+          {{ signup_form.city }}
+          {% if signup_form.city.errors %}
+            <div class="errorlist">{{ signup_form.city.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ signup_form.state.id_for_label }}">State</label>
+          {{ signup_form.state }}
+          {% if signup_form.state.errors %}
+            <div class="errorlist">{{ signup_form.state.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ signup_form.pincode.id_for_label }}">Pincode</label>
+          {{ signup_form.pincode }}
+          {% if signup_form.pincode.errors %}
+            <div class="errorlist">{{ signup_form.pincode.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ signup_form.password1.id_for_label }}">Password</label>
+          {{ signup_form.password1 }}
+          <div class="password-requirements" id="password-requirements">
+            <div class="requirement" id="length-req">
+              <span class="requirement-icon">✗</span>
+              <span>At least 8 characters</span>
+            </div>
+            <div class="requirement" id="num-req">
+              <span class="requirement-icon">✗</span>
+              <span>At least 1 number</span>
+            </div>
+            <div class="requirement" id="upper-req">
+              <span class="requirement-icon">✗</span>
+              <span>At least 1 uppercase letter</span>
+            </div>
+            <div class="requirement" id="special-req">
+              <span class="requirement-icon">✗</span>
+              <span>At least 1 special character</span>
+            </div>
+          </div>
+          {% if signup_form.password1.errors %}
+            <div class="errorlist">{{ signup_form.password1.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ signup_form.password2.id_for_label }}">Confirm Password</label>
+          {{ signup_form.password2 }}
+          <div class="password-requirements" id="confirm-message" style="display: none;">
+            <div class="requirement">
+              <span class="requirement-icon">✓</span>
+              <span>Passwords match</span>
+            </div>
+          </div>
+          {% if signup_form.password2.errors %}
+            <div class="errorlist">{{ signup_form.password2.errors }}</div>
+          {% endif %}
+        </div>
+
+        <button type="submit" name="signup">Sign Up</button>
+      </form>
+      <button class="toggle-btn" onclick="flip()">Already have an account? Login</button>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

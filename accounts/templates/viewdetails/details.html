@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doctor and Patient Details</title>
+    <style>
+        /* Reset some defaults */
+        body, h1, h2, h3, p {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #121212;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+        .container {
+            display: flex;
+            gap: 30px;
+            padding: 0 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .column {
+            flex: 1 1 400px;
+            max-width: 600px;
+        }
+        h2 {
+            margin-bottom: 20px;
+            border-bottom: 2px solid #444;
+            padding-bottom: 8px;
+            font-weight: 600;
+        }
+        .card {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px #222;
+            position: relative;
+            transition: box-shadow 0.3s ease;
+        }
+        .card:hover {
+            box-shadow: 0 0 20px #555;
+        }
+        .card h3 {
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: #bbb;
+        }
+        p {
+            margin-bottom: 8px;
+            color: #ccc;
+        }
+        img {
+            max-width: 100px;
+            height: auto;
+            border-radius: 50%;
+            margin-top: 10px;
+            filter: grayscale(100%);
+            border: 2px solid #444;
+        }
+        /* Delete button */
+        .delete-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+        .delete-btn:hover {
+            color: #f44336; /* red */
+        }
+        /* Trash bin icon as SVG */
+        .delete-btn svg {
+            fill: currentColor;
+            width: 20px;
+            height: 20px;
+        }
+        /* Responsive tweaks */
+        @media (max-width: 900px) {
+            .container {
+                gap: 20px;
+            }
+            .column {
+                max-width: 100%;
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Doctor and Patient Details</h1>
+    <div class="container">
+        <div class="column">
+            <h2>Doctors</h2>
+            {% for doctor in doctors %}
+                <div class="card">
+                    <button class="delete-btn" title="Delete">
+                        <!-- Trash bin SVG icon -->
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M3 6h18v2H3V6zm2 3h14v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9zm5 3v6h2v-6H10zm4 0v6h2v-6h-2zM9 4h6v2H9V4z"/>
+                        </svg>
+                    </button>
+                    <h3>Username :{{ doctor.username }}</h3>
+                    <p><strong>Email:</strong> {{ doctor.email }}</p>
+                    <p><strong>Address:</strong> {{ doctor.address_line1 }}, {{ doctor.city }}, {{ doctor.state }} - {{ doctor.pincode }}</p>
+                    {% if doctor.profile_picture %}
+                        <img src="{{ doctor.profile_picture.url }}" alt="Profile Picture">
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p>No doctors found.</p>
+            {% endfor %}
+        </div>
+        <div class="column">
+            <h2>Patients</h2>
+            {% for patient in patients %}
+                <div class="card">
+                    <button class="delete-btn" title="Delete">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M3 6h18v2H3V6zm2 3h14v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9zm5 3v6h2v-6H10zm4 0v6h2v-6h-2zM9 4h6v2H9V4z"/>
+                        </svg>
+                    </button>
+                    <h3>Username : {{ patient.username }}</h3>
+                    <p><strong>Email:</strong> {{ patient.email }}</p>
+                    <p><strong>Address:</strong> {{ patient.address_line1 }}, {{ patient.city }}, {{ patient.state }} - {{ patient.pincode }}</p>
+                    {% if patient.profile_picture %}
+                        <img src="{{ patient.profile_picture.url }}" alt="Profile Picture">
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p>No patients found.</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

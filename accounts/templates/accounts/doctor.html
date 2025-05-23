@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DOCTOR PROFILE</title>
+  <style>
+    :root {
+      --bg-dark: #121212;
+      --card-bg: #1e1e1e;
+      --card-border: #2e2e2e;
+      --text-primary: #e0e0e0;
+      --text-secondary: #b0b0b0;
+      --accent-color: #00ff9d;
+      --hover-color: #000000;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .dashboard-container {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 900px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--card-border);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: var(--text-primary);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    .profile-pic {
+      display: block;
+      margin: 0 auto 30px;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--accent-color);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .profile-pic:hover {
+      border-color: var(--hover-color);
+      transform: scale(1.03);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .info-card {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      transition: var(--transition);
+    }
+
+    .info-card:hover {
+      border-color: var(--accent-color);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .info-card h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: var(--accent-color);
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .info-card p {
+      margin: 8px 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* Fullscreen image overlay */
+    .fullscreen-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .fullscreen-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .fullscreen-image {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      transition: var(--transition);
+    }
+
+    .close-btn:hover {
+      color: var(--accent-color);
+      transform: rotate(90deg);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .dashboard-container {
+        padding: 20px;
+      }
+      
+      .profile-pic {
+        width: 120px;
+        height: 120px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      
+      .dashboard-container {
+        padding: 15px;
+      }
+      
+      .profile-pic {
+        width: 100px;
+        height: 100px;
+      }
+      
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1>DOCTOR PROFILE</h1>
+
+    {% if user.profile_picture %}
+      <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="profile-pic" id="profileImage" />
+    {% endif %}
+
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>Full Name</h3>
+        <p>{{ user.first_name }} {{ user.last_name }}</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Username</h3>
+        <p>{{ user.username }}</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Email</h3>
+        <p>{{ user.email }}</p>
+      </div>
+
+      <div class="info-card">
+        <h3>User Type</h3>
+        <p>{{ user.user_type }}</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Address</h3>
+        <p>{{ user.address_line1 }}</p>
+        <p>{{ user.city }}, {{ user.state }} - {{ user.pincode }}</p>
+      </div>
+
+    </div>
+  </div>
+
+
+      <div class="info-card" style="
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+">
+    {% if user.is_authenticated %}
+        {% if user.user_type == 'doctor' %}
+            <span style="
+                display: inline-block;
+                padding: 20px 30px;
+                background-color: #00ff99;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                text-align: center;
+                cursor: pointer;
+                transition: all 0.3s ease;
+
+                :hover {
+    box-shadow: 0 4px 12px rgba(0, 230, 210, 0.15);
+    transform: translateY(-2px);
+}
+            " 
+            onclick="window.location.href='{% url 'blog:doctor_view' %}'">
+                <h3 style="margin: 0; color: #333; font-weight: 500;">My Blogs</h3>
+            </span>
+        {% elif user.user_type == 'patient' %}
+            <span style="
+                display: inline-block;
+                padding: 20px 30px;
+                background-color: #ffffff;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                text-align: center;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            " 
+            onclick="window.location.href='{% url 'blog:patient_view' %}'">
+                <h3 style="margin: 0; color: #333; font-weight: 500;">View Blog Posts</h3>
+            </span>
+        {% endif %}
+    {% endif %}
+</div>
+
+    </div>
+  </div>
+  
+
+
+  <!-- Fullscreen image overlay -->
+  <div class="fullscreen-overlay" id="imageOverlay">
+    <button class="close-btn" id="closeBtn">&times;</button>
+    {% if user.profile_picture %}
+      <img src="{{ user.profile_picture.url }}" class="fullscreen-image" id="fullscreenImage" />
+    {% endif %}
+  </div>
+
+  <script>
+    // Fullscreen image functionality
+    const profileImage = document.getElementById('profileImage');
+    const imageOverlay = document.getElementById('imageOverlay');
+    const fullscreenImage = document.getElementById('fullscreenImage');
+    const closeBtn = document.getElementById('closeBtn');
+
+    if (profileImage) {
+      profileImage.addEventListener('click', function() {
+        imageOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling when overlay is active
+      });
+    }
+
+    closeBtn.addEventListener('click', function() {
+      imageOverlay.classList.remove('active');
+      document.body.style.overflow = ''; // Re-enable scrolling
+    });
+
+    // Close overlay when clicking outside the image
+    imageOverlay.addEventListener('click', function(e) {
+      if (e.target === imageOverlay) {
+        imageOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Close overlay with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && imageOverlay.classList.contains('active')) {
+        imageOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
+</body>
+</html>
